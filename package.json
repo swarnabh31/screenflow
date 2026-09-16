@@ -1,0 +1,35 @@
+{
+  "name": "screenflow",
+  "description": "Windows 11-styled browser screen recorder, video editor & Reels/Shorts merger with MP4, MOV and GIF export",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "node -e \"const fs=require('fs');['dist'].forEach(d=>{try{fs.rmSync(d,{recursive:true,maxRetries:5,force:true})}catch{}});console.log('cleaned')\"",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/recordingClock.test.ts tests/utils.test.ts"
+  },
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
+  }
+}

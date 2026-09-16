@@ -1,0 +1,55 @@
+# --- Dependencies & build output ---
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.esbuild/
+.vite/
+
+# --- Environment & secrets ---
+.env
+.env.*
+!.env.example
+*.local
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Editors & IDEs ---
+.idea/
+.vscode/
+*.swp
+*~
+.project
+.settings/
+
+# --- Logs & crash dumps ---
+*.log
+logs/
+npm-debug.log*
+yarn-error.log*
+*.crdownload
+*.partial
+
+# --- Test & runtime artifacts ---
+# session-generated reports, recordings, and temp media
+TEST_REPORT*.md
+*.mp4
+*.webm
+*.mov
+*.avi
+*.m4v
+*.mkv
+*.gif
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.ogg
+*.blob
+tmp/
+temp/
