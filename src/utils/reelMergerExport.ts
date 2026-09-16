@@ -474,11 +474,15 @@ export async function exportMergedReel(
             drawVideoFrame(ctx, nextVideo, cw, ch, fitMode, 1);
             ctx.restore();
           } else if (clip.transitionToNext === 'zoom') {
-            const zoomScale = 1 + progress * 0.15;
+            // Zoom the current clip toward center while the next clip's start
+            // frame fades in on top (the transform is applied to both draws).
+            const zoomScale = 1 + progress * 0.2;
             ctx.save();
             ctx.translate(cw / 2, ch / 2);
             ctx.scale(zoomScale, zoomScale);
             ctx.translate(-cw / 2, -ch / 2);
+            nextVideo.currentTime = nextTiming.start;
+            drawVideoFrame(ctx, nextVideo, cw, ch, fitMode, Math.min(1, progress * 2));
             ctx.restore();
           }
         }
