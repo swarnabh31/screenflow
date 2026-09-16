@@ -87,15 +87,15 @@ npm run preview  # serve the built bundle locally
 
 ## Export — what you actually get
 
-Recording always produces **WebM** (VP9/VP8 + Opus) — that's the only container `MediaRecorder` can emit universally. When you ask for MP4 or MOV the app transcodes the WebM to a real **H.264/AAC MP4/MOV** using **ffmpeg.wasm** (a WebAssembly build of FFmpeg, MIT-licensed).
+Rendering always goes through canvas → `MediaRecorder`. The codec is chosen per browser (`chooseExportCodec` in `src/utils/mediaExport.ts`): Chrome/Edge can record **native H.264/AAC MP4**, so on Chromium selecting **MP4** uses the native path and ffmpeg is not involved. Otherwise the recorder falls back to **WebM (VP9/Opus)** and the app finalizes the file with **ffmpeg.wasm** (a WebAssembly build of FFmpeg, MIT-licensed) into a real **H.264/AAC MP4/MOV**.
 
 | Format | What's produced | Notes |
 |---|---|---|
-| **MP4** | Valid `.mp4`, H.264 video + AAC audio, universal compatibility | First download fetches the ~30 MB ffmpeg.wasm core from a CDN; the browser caches it after that |
-| **MOV** | Valid `.mov` container, H.264 + AAC | For Final Cut / ProRes workflows; ffmpeg handles the container |
-| **GIF** | Real animated GIF, LZW + NeuQuant palette in `src/utils/gifEncoder.ts` | Capped at 15 FPS and 640×640 max to keep sizes reasonable |
+| **MP4** | Valid `.mp4`, H.264 video + AAC audio, universal compatibility | Native MP4 on Chrome/Edge; on other browsers the WebM is transcoded — which requires the one-time ~30 MB ffmpeg.wasm core fetch from a CDN (browser-cached afterwards) |
+| **MOV** | Valid `.mov` container, H.264 + AAC | For Final Cut workflows; always finalized via ffmpeg.wasm |
+| **GIF** | Real animated GIF, LZW + NeuQuant palette in `src/utils/gifEncoder.ts` | Capped at 15 FPS and 640 px wide max to keep sizes reasonable |
 
-If the ffmpeg core fails to load (offline, CSP, etc.) the app falls back to delivering the WebM with an honest `.webm` filename — a WebM is never mis-labelled as MP4/MOV. See `src/utils/ffmpegTranscode.ts:1` and `src/utils/ffmpegTranscode.ts:131`.
+If the ffmpeg core fails to load (offline, CSP, etc.) the app falls back to delivering the WebM with an honest `.webm` filename — a WebM is never mis-labelled as MP4/MOV. See `src/utils/ffmpegTranscode.ts` and the codec-selection regression tests in `tests/utils.test.ts`.
 
 ---
 
